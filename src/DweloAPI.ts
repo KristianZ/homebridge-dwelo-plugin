@@ -62,6 +62,13 @@ export class DweloAPI {
     return response.data.results;
   }
 
+  public async setBrightness(brightness: number, id: number) {
+    return this.request(`/v3/device/${id}/command/`, {
+      method: 'POST',
+      data: { 'command': brightness },
+    });
+  }
+
   public async toggleSwitch(on: boolean, id: number) {
     return this.request(`/v3/device/${id}/command/`, {
       method: 'POST',
