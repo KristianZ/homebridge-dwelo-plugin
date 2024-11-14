@@ -17,9 +17,9 @@ export class DweloDimmerAccessory implements AccessoryPlugin {
   constructor(log: Logging, api: API, dweloAPI: DweloAPI, name: string, dimmerId: number) {
     this.log = log;
     this.name = name;
-    this.brightness = 0;
+    this.brightness = 20;
 
-    this.service = new api.hap.Service.Switch(this.name);
+    this.service = new api.hap.Service.Lightbulb(this.name);
     this.service.getCharacteristic(api.hap.Characteristic.On)
       .onGet(async () => {
         const sensors = await dweloAPI.sensors(dimmerId);
@@ -28,27 +28,26 @@ export class DweloDimmerAccessory implements AccessoryPlugin {
         return isOn;
       })
       .onSet(async value => {
-        await dweloAPI.toggleSwitch(value as boolean, dimmerId);
-        this.brightness = (value) ? 99 : 0;
-        log.debug(`Dimmer state was set to: ${value ? 'ON' : 'OFF'}`);
+        const isOn = value as boolean;
+        if(isOn) {
+          await dweloAPI.setBrightness(this.brightness, dimmerId);
+        } else {
+          await dweloAPI.toggleSwitch(false, dimmerId);
+        }
+        log.debug(`Dimmer state was set to: ${isOn ? this.brightness : 'OFF'}`);
       });
     this.service.getCharacteristic(api.hap.Characteristic.Brightness)
+      .setProps({
+        minValue: 0,
+        maxValue: 99,
+        minStep: 1,
+      })
       .onGet(async () => {
-        const sensors = await dweloAPI.sensors(dimmerId);
-        const isOn = sensors[0]?.value === 'on';
-
-        if(this.brightness === 0 && isOn) {
-          this.brightness = 99;
-          log.debug('Dimmer state out of sync! Reset from 0 to 99.');
-        } else if(this.brightness === 99 && !(isOn)) {
-          this.brightness = 0;
-          log.debug('Dimmer state out of sync! Reset from 99 to 0.');
-        }
         return this.brightness;
       })
       .onSet(async value => {
-        await dweloAPI.setBrightness(value as number, dimmerId);
         this.brightness = value as number;
+        await dweloAPI.setBrightness(this.brightness, dimmerId);
         log.debug(`Dimmer state was set to: ${value}`);
       });
 
