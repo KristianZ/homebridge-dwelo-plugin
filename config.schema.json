@@ -1,5 +1,5 @@
 {
-  "pluginAlias": "HomebridgePluginDwelo",
+  "pluginAlias": "HomebridgeDweloPlugin",
   "pluginType": "platform",
   "singular": true,
   "schema": {
