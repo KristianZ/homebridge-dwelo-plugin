@@ -1,8 +1,8 @@
 import { API } from 'homebridge';
 
-import { HomebridgePluginDweloPlatform } from './HomebridgePluginDweloPlatform';
+import { HomebridgeDweloPluginPlatform } from './HomebridgeDweloPluginPlatform';
 import { PLATFORM_NAME } from './settings';
 
 export default (api: API) => {
-  api.registerPlatform(PLATFORM_NAME, HomebridgePluginDweloPlatform);
+  api.registerPlatform(PLATFORM_NAME, HomebridgeDweloPluginPlatform);
 };

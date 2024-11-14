@@ -5,7 +5,7 @@ import { DweloLockAccessory } from './DweloLockAccessory';
 import { DweloSwitchAccessory } from './DweloSwitchAccessory';
 import { DweloDimmerAccessory } from './DweloDimmerAccessory';
 
-export class HomebridgePluginDweloPlatform implements StaticPlatformPlugin {
+export class HomebridgeDweloPluginPlatform implements StaticPlatformPlugin {
   private readonly dweloAPI: DweloAPI;
 
   constructor(
