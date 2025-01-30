@@ -46,7 +46,11 @@ export class DweloDimmerAccessory implements AccessoryPlugin {
         return this.brightness;
       })
       .onSet(async value => {
-        this.brightness = value as number;
+        const newBrightness = value as number;
+        if(newBrightness === this.brightness) {
+          return;
+        }
+        this.brightness = newBrightness;
         await dweloAPI.setBrightness(this.brightness, dimmerId);
         log.debug(`Dimmer state was set to: ${value}`);
       });
