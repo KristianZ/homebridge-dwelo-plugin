@@ -26,6 +26,17 @@ interface ListDevicesResponse extends ListResponse {
   results: Device[];
 }
 
+export interface CommunityDoor {
+  name: string;
+  panelId: string;
+  secondsOpen: number;
+  uid: number;
+}
+
+interface ListCommunityDoorsResponse extends ListResponse {
+  results: CommunityDoor[];
+}
+
 export interface Sensor {
   deviceId: number;
   gatewayId: number;
@@ -40,7 +51,7 @@ interface ListSensorsResponse extends ListResponse {
 }
 
 export class DweloAPI {
-  constructor(private readonly token: string, private readonly gatewayID: string) { }
+  constructor(private readonly token: string, private readonly gatewayID: string, private readonly communityId: string) { }
 
   public async devices(): Promise<Device[]> {
     const response = await this.request<ListDevicesResponse>('/v3/device', {
@@ -50,6 +61,15 @@ export class DweloAPI {
         offset: 0,
       },
     });
+    return response.data.results;
+  }
+
+  public async communityDoors(): Promise<CommunityDoor[]> {
+    if (!this.communityId) {
+      return [];
+    }
+
+    const response = await this.request<ListCommunityDoorsResponse>(`/v3/perimeter/door/community/${this.communityId}`);
     return response.data.results;
   }
 
@@ -88,6 +108,15 @@ export class DweloAPI {
       stopCondition: s => s.find(s => s.sensorType === 'lock')?.value === target,
       interval: 5000,
       timeout: 60 * 1000,
+    });
+  }
+
+  public async openDoor(uid: number, panelId: string) {
+    return this.request(`/v3/perimeter/door/${uid}/open`, {
+      method: 'POST',
+      data: {
+        panelId,
+      },
     });
   }
 
