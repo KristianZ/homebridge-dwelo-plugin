@@ -44,7 +44,8 @@ export class HomebridgeDweloPluginPlatform implements StaticPlatformPlugin {
       case 'dimmer':
         return new DweloDimmerAccessory(this.log, this.api, this.dweloAPI, device.givenName, device.uid);
       default:
-        this.log.warn(`Device ${device.uid} (${device.givenName}) is not supported because ${device.deviceType} devices are not supported.`);
+        this.log.warn(
+          `Device ${device.uid} (${device.givenName}) is not supported because ${device.deviceType} devices are not supported.`);
         return null;
     }
   }

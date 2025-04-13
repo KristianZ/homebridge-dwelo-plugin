@@ -11,14 +11,15 @@ import { CommunityDoor, DweloAPI } from './DweloAPI';
 export class DweloCommunityDoorAccessory implements AccessoryPlugin {
   private readonly lockService: Service;
   private targetState: CharacteristicValue = this.api.hap.Characteristic.LockTargetState.SECURED;
+  public readonly name: string;
 
   constructor(
     private readonly log: Logging,
     private readonly api: API,
     private readonly dweloAPI: DweloAPI,
     private readonly door: CommunityDoor) {
-
-    this.lockService = new api.hap.Service.LockMechanism(door.name);
+    this.name = door.name;
+    this.lockService = new api.hap.Service.LockMechanism(this.name);
 
     this.lockService.getCharacteristic(api.hap.Characteristic.LockCurrentState)
       .onGet(() => {
