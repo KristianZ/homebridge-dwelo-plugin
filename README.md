@@ -42,11 +42,11 @@ Makes Dwelo devices available to Homebridge, which can be used to control them f
 
 ### Install on Homebridge
 1. Navigate to Homebridge via the terminal or browser (`http://<ip>:8581/login` or http://homebridge.local:8581)
-2. Navigate to the repository. If you uploaded to the Raspberry Pi using the previous steps, you can navigate to the repository by running `cd ~/homebridge-dwelo-plugin`.
-3. **⚠️ _First time setup only_ ⚠️** Run `npm install` to install the dependencies.
-4. Run `npm build` to compile the TypeScript code.
-5. **⚠️ _First time setup only_ ⚠️** Run `npm link` to surface the repository as a package to npm.
-6. **⚠️ _First time setup only_ ⚠️** Run `npm link <name field in package.json>` to surface the repository as a package to Homebridge.
+2. Navigate to the repository. If you uploaded to the Raspberry Pi using the previous steps, you can navigate to the repository by running `cd ../../homebridge-dwelo-plugin`.
+3. Run `npm ci` to install the dependencies.
+4. Run `npm run build` to compile the TypeScript code.
+5. Run `cd ../../` to go back to the hardware parent directory.
+6. Run `cd npm run --prefix /var/lib/homebridge i /home/pi/homebridge-dwelo-plugin` to install the plugin.
 7. Run `sudo hb-service restart` to restart Homebridge.
 
 ## Contributing
